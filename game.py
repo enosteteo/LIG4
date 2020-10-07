@@ -5,16 +5,11 @@ class Tabuleiro():
         self.tab = [[0 for x in range(self.x)] for y in range(self.y)]
 
     def colocar_peca(self, peca, x):
-        self[0][x] = peca
+        self.tab[0][x] = peca
         return self.tab
 
     def imprimir(self):
-        for x_linha in range(self.x):
-            for y_linha in range(self.y):
-                if y_linha == y - 1:
-                    print(f'{tabuleiro[x_linha][y_linha]}')
-                else:
-                    print(f'{tabuleiro[x_linha][y_linha]}', end=" ")
+        return self.tab
 
 
 class Jogador():
@@ -29,4 +24,4 @@ if __name__ == '__main__':
     jogador_2 = Jogador('z', 21)
     tabuleiro = Tabuleiro(6, 7)
     tabuleiro.colocar_peca(jogador_1.peca, 2)
-    tabuleiro.imprimir_tabuleiro()
+    print(tabuleiro.imprimir())
