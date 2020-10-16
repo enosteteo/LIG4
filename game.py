@@ -40,16 +40,31 @@ class Game:
         line = 0
         self.board.put_piece(player.color, line, column)
 
+    def print_board(self):
+        board = self.board.board()
+        return board
+
+    def check_is_end_game(self):
+        pass
+
+    def check_point(self):
+        pass
+
+    def check_win(self):
+        pass
+
     def start(self):
         end = False
         while not end:
             print(f'Round {self.round} Player One')
-            print(self.board())
+            print(self.print_board())
             move = input('{what\'s your move?')
-            self.move_piece(self.player_one, move)
-            self.board.put_piece(self.player_one.color, 0, move)
+            self.move_piece(self.player_one, move) # self.board.put_piece(self.player_one.color, 0, move)
             print(f'Round {self.round} Player Two')
             move = input('{what\'s your move?')
+            self.move_piece(self.player_two, move) # self.board.put_piece(self.player_two.color, 0, move)
+            print(f'end round {self.round}')
+            self.round += 1
 
     # def vez_de_jogar(self):
     #     if self.jogador_1.qnt_piece % 2 == 1:
