@@ -1,3 +1,7 @@
+from py._code.code import ExceptionInfo
+
+zero = '0'
+
 class Board:
     def __init__(self, lines, columns):
         """
@@ -7,7 +11,7 @@ class Board:
 
         self.lines = lines
         self.columns = columns
-        self.atr_board = [['0' for lines in range(self.lines)] for columns in range(self.columns)]
+        self.atr_board = [[zero for lines in range(self.lines)] for columns in range(self.columns)]
 
     def board(self):
         return self.atr_board
@@ -37,8 +41,11 @@ class Game:
         self.round = 0
 
     def move_piece(self, player, column):
-        line = 0
-        self.board.put_piece(player.color, line, column)
+        self.column_is_full(column)
+        for line in self.board.lines:
+            if self.board.board()[line][column] == zero:
+                self.board.put_piece(player.color, line, column)
+                break
 
     def print_board(self):
         board = self.board.board()
@@ -52,6 +59,10 @@ class Game:
 
     def check_win(self):
         pass
+
+    def column_is_full(self, column):
+        if self.board.board()[self.board.lines - 1][column] != zero:
+            raise Exception('Complete column. Choose another')
 
     def start(self):
         end = False
