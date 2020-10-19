@@ -1,4 +1,4 @@
-from game import Board
+from board import Board
 
 
 def test_create_board_with_6_lines_7_columns():

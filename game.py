@@ -1,58 +1,50 @@
-from py._code.code import ExceptionInfo
+from board import Board
+from player import Player
 
-zero = '0'
-
-class Board:
-    def __init__(self, lines, columns):
-        """
-        :param lines: int > 0
-        :param columns: int > 0
-        """
-
-        self.lines = lines
-        self.columns = columns
-        self.atr_board = [[zero for lines in range(self.lines)] for columns in range(self.columns)]
-
-    def board(self):
-        return self.atr_board
-
-    def put_piece(self, piece, line, column):
-        """
-        :param column: int | columns
-        :param line: int | line
-        :param piece: str | player.color
-        """
-        self.board()[line][column] = piece
-
-
-class Player:
-    def __init__(self, color, qnt_piece, points=0):
-        self.color = color
-        self.qnt_piece = qnt_piece
-        self.points = points
+empty = '0'
+confirm_end = '-404'
 
 
 class Game:
-    def __init__(self, line, column, color_one, color_two):
-        self.board = Board(line, column)
+    round = 0
+    player_one = Player
+    player_two = Player
+    board = Board
+    end = False
+
+    def settings(self, line, column, color_one, color_two):
         points = (line * column / 2)
         self.player_one = Player(color_one, points)
         self.player_two = Player(color_two, points)
-        self.round = 0
+        self.board = Board(line, column, empty)
+        self.line = line
+        self.column = column
 
     def move_piece(self, player, column):
-        self.column_is_full(column)
-        for line in self.board.lines:
-            if self.board.board()[line][column] == zero:
+        self.check_is_end_game(column)
+        self.is_valid(column)
+        for line in range(self.line):
+            if self.board.board()[line][column] == empty:
                 self.board.put_piece(player.color, line, column)
                 break
+
+    def is_valid(self, column):
+        # column is valid (between 0 and max column)
+        if not (0 <= column <= self.column):
+            raise Exception('invalid column. Choose another')
+
+        # column is full
+        if self.board.board()[self.line - 1][column] != empty:
+            raise Exception('Complete column. Choose another')
 
     def print_board(self):
         board = self.board.board()
         return board
 
-    def check_is_end_game(self):
-        pass
+    def check_is_end_game(self, column):
+        # End game
+        if column == confirm_end:
+            self.end = True
 
     def check_point(self):
         pass
@@ -60,21 +52,27 @@ class Game:
     def check_win(self):
         pass
 
-    def column_is_full(self, column):
-        if self.board.board()[self.board.lines - 1][column] != zero:
-            raise Exception('Complete column. Choose another')
+    def verify_status_game(self):
+        self.check_point()
+        self.check_is_end_game()
 
     def start(self):
-        end = False
-        while not end:
+        while not self.end:
+            print('press -404 to exit')
+
             print(f'Round {self.round} Player One')
             print(self.print_board())
             move = input('{what\'s your move?')
             self.move_piece(self.player_one, move) # self.board.put_piece(self.player_one.color, 0, move)
+            self.verify_status_game()
+            print(self.print_board())
+
             print(f'Round {self.round} Player Two')
             move = input('{what\'s your move?')
             self.move_piece(self.player_two, move) # self.board.put_piece(self.player_two.color, 0, move)
+            print(self.print_board())
             print(f'end round {self.round}')
+
             self.round += 1
 
     # def vez_de_jogar(self):
@@ -93,14 +91,3 @@ class Game:
     #
     # def regra_do_jogo(self):
     #     pass
-
-# start
-
-
-if __name__ == '__main__':
-    line = input('How many lines should the board contains?')
-    column = input('How many column should the board contains?')
-    color_one = input('What color you want play with Player One?')
-    color_two = input('What color you want play with Player Two?')
-    game = Game(line, column, color_one, color_two)
-    game.start()
