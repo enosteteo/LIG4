@@ -64,7 +64,7 @@ class Game:
             print(self.print_board())
             move = input('{what\'s your move?')
             self.move_piece(self.player_one, move) # self.board.put_piece(self.player_one.color, 0, move)
-            self.verify_status_game()
+            self.verify_status_game()   
             print(self.print_board())
 
             print(f'Round {self.round} Player Two')
